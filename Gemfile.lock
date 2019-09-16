@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    terminal_image (0.1.0)
+    terminal_image (0.2.0)
       fastimage
 
 GEM
