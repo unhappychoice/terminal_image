@@ -20,6 +20,13 @@ module TerminalImage
       puts encode(file)
     end
 
+    def encode_url(url)
+      tempfile = Tempfile.create
+      tempfile.binmode
+      URI.open(url) { |o| tempfile.write o.read }
+      TerminalImage.encode(tempfile)
+    end
+
     def encode(file)
       if ENV['TERM_PROGRAM'] == 'iTerm.app'
         encode_for_iterm2(file)
