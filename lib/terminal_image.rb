@@ -1,4 +1,6 @@
-require "terminal_image/version"
+# frozen_string_literal: true
+
+require 'terminal_image/version'
 require 'fastimage'
 require 'open-uri'
 require 'tempfile'
