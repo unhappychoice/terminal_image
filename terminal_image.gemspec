@@ -31,7 +31,12 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'fastimage'
 
   spec.add_development_dependency 'bundler', '~> 2.0'
+  spec.add_development_dependency 'codecov'
+  spec.add_development_dependency 'guard'
+  spec.add_development_dependency 'guard-rspec'
+  spec.add_development_dependency 'guard-rubocop'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'simplecov'
 end
