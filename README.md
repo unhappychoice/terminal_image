@@ -1,6 +1,7 @@
 # TerminalImage
 
 TerminalImage is a library to show images on terminals. 
+Supporting iTerm2 and terminals which has installed [libsixel](https://github.com/saitoha/libsixel).
 
 ![](./images/example.png)
 
@@ -15,8 +16,9 @@ gem 'terminal_image'
 ## Usage
 
 ```ruby
-file = File.open('your-image-path.png')
-TerminalImage.show(file) # will show image on your terminal
+TerminalImage.show(File.open('your-image-path.png')) # will show image on your terminal
+TerminalImage.show_url('https://raw.githubusercontent.com/unhappychoice/terminal_image/master/images/sample.png')
+puts TerminalImage.encode(File.open('your-image-path.png'))  # will encode image to string which can be displayed in terminals
 ```
 
 ## Contributing
