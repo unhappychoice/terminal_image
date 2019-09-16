@@ -8,7 +8,7 @@
 ![GitHub](https://img.shields.io/github/license/unhappychoice/terminal_image.svg)
 
 TerminalImage is a library to show images on terminals. 
-Currently, this library supports [iTerm2](https://iterm2.com/index.html) and terminals which supports [libsixel](https://github.com/saitoha/libsixel).
+Currently, this library supports [iTerm2](https://iterm2.com/index.html) and terminals with [libsixel](https://github.com/saitoha/libsixel) installed.
 
 ![](./images/example.png)
 
