@@ -33,7 +33,7 @@ module TerminalImage
       elsif which 'img2sixel'
         encode_for_libsixel(file)
       else
-        puts 'Use iTerm2 or install libsixel according to https://github.com/saitoha/libsixel#install'
+        warn 'Use iTerm2 or install libsixel according to https://github.com/saitoha/libsixel#install'
         raise UnsupportedTerminal, 'Unsupported terminal'
       end
     end
@@ -42,7 +42,7 @@ module TerminalImage
 
     def encode_for_iterm2(file)
       width, height = FastImage.size(file)
-      "\033]1337;File=inline=1;width=#{width}px;height=#{height}px:#{Base64.strict_encode64(file.read)}\a\n"
+      "\033]1337;File=inline=1;width=#{width}px;height=#{height}px:#{Base64.strict_encode64(file.read)}\a"
     end
 
     def encode_for_libsixel(file)
