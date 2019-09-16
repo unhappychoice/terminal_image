@@ -1,7 +1,14 @@
 # TerminalImage
 
+[![Gem Version](https://badge.fury.io/rb/terminal_image.svg)](https://badge.fury.io/rb/terminal_image)
+[![Code Climate](https://codeclimate.com/github/unhappychoice/terminal_image/badges/gpa.svg)](https://codeclimate.com/github/unhappychoice/terminal_image)
+[![codecov](https://codecov.io/gh/unhappychoice/terminal_image/branch/master/graph/badge.svg)](https://codecov.io/gh/unhappychoice/terminal_image)
+[![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/unhappychoice/terminal_image.svg)](https://libraries.io/github/unhappychoice/terminal_image)
+![](http://ruby-gem-downloads-badge.herokuapp.com/terminal_image?type=total)
+![GitHub](https://img.shields.io/github/license/unhappychoice/terminal_image.svg)
+
 TerminalImage is a library to show images on terminals. 
-Supporting iTerm2 and terminals which has installed [libsixel](https://github.com/saitoha/libsixel).
+Currently, this library supports [iTerm2](https://iterm2.com/index.html) and terminals which supports [libsixel](https://github.com/saitoha/libsixel).
 
 ![](./images/example.png)
 
@@ -13,12 +20,24 @@ Add this line to your application's Gemfile:
 gem 'terminal_image'
 ```
 
+Terminals other than iTerm2:
+
+Please install `libsixel`'s `img2sixel` command following https://github.com/saitoha/libsixel#install
+
 ## Usage
 
 ```ruby
-TerminalImage.show(File.open('your-image-path.png')) # will show image on your terminal
+# Print image by File object
+TerminalImage.show(File.open('your-image-path.png'))
+
+# Print image from URL
 TerminalImage.show_url('https://raw.githubusercontent.com/unhappychoice/terminal_image/master/images/sample.png')
-puts TerminalImage.encode(File.open('your-image-path.png'))  # will encode image to string which can be displayed in terminals
+
+# Get encoded string ready to be displayed 
+string = TerminalImage.encode(File.open('your-image-path.png'))
+
+# Get encoded string ready to be displayed from URL
+string = TerminalImage.encode_url('https://raw.githubusercontent.com/unhappychoice/terminal_image/master/images/sample.png')
 ```
 
 ## Contributing
