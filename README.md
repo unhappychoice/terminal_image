@@ -1,6 +1,7 @@
 # TerminalImage
 
 [![Gem Version](https://badge.fury.io/rb/terminal_image.svg)](https://badge.fury.io/rb/terminal_image)
+[![Circle CI](https://circleci.com/gh/unhappychoice/terminal_image.svg?style=shield)](https://circleci.com/gh/unhappychoice/terminal_image)
 [![Code Climate](https://codeclimate.com/github/unhappychoice/terminal_image/badges/gpa.svg)](https://codeclimate.com/github/unhappychoice/terminal_image)
 [![codecov](https://codecov.io/gh/unhappychoice/terminal_image/branch/master/graph/badge.svg)](https://codecov.io/gh/unhappychoice/terminal_image)
 [![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/unhappychoice/terminal_image.svg)](https://libraries.io/github/unhappychoice/terminal_image)
