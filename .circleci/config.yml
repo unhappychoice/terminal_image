@@ -44,6 +44,7 @@ jobs:
       - *restore_bundle_cache
       - *update_bundler
       - *bundle_install
+      - run: sudo apt-get install libsixel-bin
       - run:
           environment:
             RAILS_ENV: test
