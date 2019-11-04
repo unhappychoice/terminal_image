@@ -18,7 +18,7 @@ GEM
     fastimage (2.1.7)
     ffi (1.11.1)
     formatador (0.2.5)
-    guard (2.16.0)
+    guard (2.16.1)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
       lumberjack (>= 1.0.12, < 2.0)
