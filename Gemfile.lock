@@ -8,7 +8,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.0)
-    codecov (0.1.15)
+    codecov (0.1.16)
       json
       simplecov
       url
