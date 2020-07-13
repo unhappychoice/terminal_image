@@ -8,7 +8,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.1)
-    codecov (0.1.19)
+    codecov (0.2.0)
       colorize
       json
       simplecov
