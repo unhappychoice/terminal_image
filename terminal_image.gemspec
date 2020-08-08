@@ -7,6 +7,7 @@ require 'terminal_image/version'
 Gem::Specification.new do |spec|
   spec.name          = 'terminal_image'
   spec.version       = TerminalImage::VERSION
+  spec.required_ruby_version = '>= 2.5'
   spec.authors       = ['Yuji Ueki']
   spec.email         = ['unhappychoice@gmail.com']
 
