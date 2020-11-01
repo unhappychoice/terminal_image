@@ -12,7 +12,7 @@ module TerminalImage
     def show_url(url)
       tempfile = Tempfile.create
       tempfile.binmode
-      URI.open(url) { |o| tempfile.write o.read }
+      URI.parse(url).open { |o| tempfile.write o.read }
       TerminalImage.show(tempfile)
     end
 
@@ -23,7 +23,7 @@ module TerminalImage
     def encode_url(url)
       tempfile = Tempfile.create
       tempfile.binmode
-      URI.open(url) { |o| tempfile.write o.read }
+      URI.parse(url).open { |o| tempfile.write o.read }
       TerminalImage.encode(tempfile)
     end
 

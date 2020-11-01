@@ -15,7 +15,7 @@ RSpec.describe TerminalImage do # rubocop:disable Metrics/BlockLength
       allow(tempfile).to receive(:binmode)
       allow(tempfile).to receive(:path) { File.open('spec/files/sample.png').path }
       allow(tempfile).to receive(:read) { File.read('spec/files/sample.png') }
-      allow(URI).to receive(:open)
+      allow(URI).to receive_message_chain(:parse, :open)
     end
   end
 
