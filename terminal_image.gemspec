@@ -5,20 +5,20 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'terminal_image/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'terminal_image'
-  spec.version       = TerminalImage::VERSION
+  spec.name                  = 'terminal_image'
+  spec.version               = TerminalImage::VERSION
   spec.required_ruby_version = '>= 2.5'
-  spec.authors       = ['Yuji Ueki']
-  spec.email         = ['unhappychoice@gmail.com']
+  spec.authors               = ['Yuji Ueki']
+  spec.email                 = ['unhappychoice@gmail.com']
+  spec.summary               = 'Display images on terminal'
+  spec.description           = 'Displays images on terminal'
+  spec.homepage              = 'https://github.com/unhappychoice/terminal_image'
+  spec.license               = 'MIT'
 
-  spec.summary       = 'Display images on terminal'
-  spec.description   = 'Displays images on terminal'
-  spec.homepage      = 'https://github.com/unhappychoice/terminal_image'
-  spec.license       = 'MIT'
-
-  spec.metadata['homepage_uri'] = spec.homepage
-  spec.metadata['source_code_uri'] = 'https://github.com/unhappychoice/terminal_image'
-  spec.metadata['changelog_uri'] = 'https://github.com/unhappychoice/terminal_image'
+  spec.metadata['homepage_uri']          = spec.homepage
+  spec.metadata['source_code_uri']       = 'https://github.com/unhappychoice/terminal_image'
+  spec.metadata['changelog_uri']         = 'https://github.com/unhappychoice/terminal_image'
+  spec.metadata['rubygems_mfa_required'] = 'true'
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
