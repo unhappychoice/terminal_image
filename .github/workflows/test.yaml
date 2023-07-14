@@ -1,0 +1,50 @@
+name: test
+
+on: [push]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+      - name: Install bundler
+        run: gem install bundler
+      - name: Install dependencies
+        run: bundle install --jobs 4
+      - name: Run test
+        run: bundle exec rubocop lib
+  test:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    strategy:
+      matrix:
+        ruby: ['3.2.2', '3.1.4', '3.0.6', '2.7.8', '2.6.10']
+    steps:
+      - uses: actions/checkout@master
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - name: Install bundler
+        run: gem install bundler
+      - name: Install dependencies
+        run: bundle install --jobs 4
+      - name: Run test
+        env:
+          COVERAGE: true
+          CODECOV_TOKEN: d3d0fd4f-db2c-439b-9331-8e1d992813ad
+          AWS_REGION: ap-northeast-1
+        run: bundle exec rspec
