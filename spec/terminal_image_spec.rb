@@ -24,14 +24,14 @@ RSpec.describe TerminalImage do # rubocop:disable Metrics/BlockLength
 
     context 'with iTerm2' do
       let(:expected) { "\e]1337;#{File.read('spec/files/sample_encoded_iterm')}\a\n" }
-      before { allow(ENV).to receive(:[]) { 'iTerm.app' } }
+      before { allow(ENV).to receive(:fetch) { 'iTerm.app' } }
       it { expect { TerminalImage.show_url('http://example.com/sample.png') }.to output(expected).to_stdout }
     end
 
     context 'with sixel' do
       let(:expected) { "\eP#{File.read('spec/files/sample_encoded_sixel')}\e\\\n" }
       before do
-        allow(ENV).to receive(:[]) { 'Not a iTerm' }
+        allow(ENV).to receive(:fetch) { 'Not a iTerm' }
         allow(TerminalImage).to receive(:which) { true }
       end
       it { expect { TerminalImage.show_url('http://example.com/sample.png') }.to output(expected).to_stdout }
@@ -43,14 +43,14 @@ RSpec.describe TerminalImage do # rubocop:disable Metrics/BlockLength
 
     context 'with iTerm2' do
       let(:expected) { "\e]1337;#{File.read('spec/files/sample_encoded_iterm')}\a\n" }
-      before { allow(ENV).to receive(:[]) { 'iTerm.app' } }
+      before { allow(ENV).to receive(:fetch) { 'iTerm.app' } }
       it { expect { TerminalImage.show(file) }.to output(expected).to_stdout }
     end
 
     context 'with sixel' do
       let(:expected) { "\eP#{File.read('spec/files/sample_encoded_sixel')}\e\\\n" }
       before do
-        allow(ENV).to receive(:[]) { 'Not a iTerm' }
+        allow(ENV).to receive(:fetch) { 'Not a iTerm' }
         allow(TerminalImage).to receive(:which) { true }
       end
       it { expect { TerminalImage.show(file) }.to output(expected).to_stdout }
@@ -62,13 +62,13 @@ RSpec.describe TerminalImage do # rubocop:disable Metrics/BlockLength
 
     context 'with iTerm2' do
       let(:expected) { "\e]1337;#{File.read('spec/files/sample_encoded_iterm')}\a" }
-      before { allow(ENV).to receive(:[]) { 'iTerm.app' } }
+      before { allow(ENV).to receive(:fetch) { 'iTerm.app' } }
       it { expect(TerminalImage.encode_url('http://example.com/sample.png')).to eq(expected) }
     end
 
     context 'with sixel' do
       let(:expected) { "\eP#{File.read('spec/files/sample_encoded_sixel')}\e\\" }
-      before { allow(ENV).to receive(:[]) { 'Not a iTerm' } }
+      before { allow(ENV).to receive(:fetch) { 'Not a iTerm' } }
       before { allow(TerminalImage).to receive(:which) { true } }
       it { expect(TerminalImage.encode_url('http://example.com/sample.png')).to eq(expected) }
     end
@@ -79,20 +79,20 @@ RSpec.describe TerminalImage do # rubocop:disable Metrics/BlockLength
 
     context 'with iTerm2' do
       let(:expected) { "\e]1337;#{File.read('spec/files/sample_encoded_iterm')}\a" }
-      before { allow(ENV).to receive(:[]) { 'iTerm.app' } }
+      before { allow(ENV).to receive(:fetch) { 'iTerm.app' } }
       it { expect(TerminalImage.encode(file)).to eq(expected) }
     end
 
     context 'with sixel' do
       let(:expected) { "\eP#{File.read('spec/files/sample_encoded_sixel')}\e\\" }
-      before { allow(ENV).to receive(:[]) { 'Not a iTerm' } }
+      before { allow(ENV).to receive(:fetch) { 'Not a iTerm' } }
       before { allow(TerminalImage).to receive(:which) { true } }
       it { expect(TerminalImage.encode(file)).to eq(expected) }
     end
 
     context 'with unsupported terminal' do
       let(:expected) { "\eP#{File.read('spec/files/sample_encoded_sixel')}\e\\" }
-      before { allow(ENV).to receive(:[]) { 'Not a iTerm' } }
+      before { allow(ENV).to receive(:fetch) { 'Not a iTerm' } }
       before { allow(TerminalImage).to receive(:which) { false } }
       it { expect { TerminalImage.encode(file) }.to raise_error(TerminalImage::UnsupportedTerminal) }
     end

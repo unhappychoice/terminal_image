@@ -38,6 +38,8 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
+      - name: Install libsixel
+        run: sudo apt-get install libsixel-bin
       - name: Install bundler
         run: gem install bundler
       - name: Install dependencies
