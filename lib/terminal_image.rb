@@ -28,7 +28,7 @@ module TerminalImage
     end
 
     def encode(file)
-      if ENV['TERM_PROGRAM'] == 'iTerm.app'
+      if ENV.fetch('TERM_PROGRAM', nil) == 'iTerm.app'
         encode_for_iterm2(file)
       elsif which 'img2sixel'
         encode_for_libsixel(file)
