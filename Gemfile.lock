@@ -14,7 +14,7 @@ GEM
     diff-lcs (1.5.1)
     docile (1.4.0)
     fastimage (2.3.1)
-    ffi (1.16.3)
+    ffi (1.17.0)
     formatador (1.1.0)
     guard (2.18.1)
       formatador (>= 0.2.4)
