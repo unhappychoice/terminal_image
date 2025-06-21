@@ -2,6 +2,15 @@ name: release
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: Release version
+        required: true
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
 jobs:
   push:
     name: Push gem to RubyGems.org
@@ -18,4 +27,19 @@ jobs:
         with:
           bundler-cache: true
           ruby-version: .ruby-version
+      - name: Setup Git
+        run: |
+          git config --global user.email "unhappychoice@gmail.com"
+          git config --global user.name "unhappychoice"
+      - name: Install gem-release
+        run: gem install gem-release
+      - name: Bump version
+        run: |
+          git status
+          gem bump --version ${{inputs.version}} --message ':tada: Bump %{name} to %{version}'
+          git status
+          bundle config set frozen false 
+          bundle install
+          git add .
+          git commit --amend --no-edit
       - uses: rubygems/release-gem@v1
