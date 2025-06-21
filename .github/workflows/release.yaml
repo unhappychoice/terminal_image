@@ -6,6 +6,8 @@ jobs:
   push:
     name: Push gem to RubyGems.org
     runs-on: ubuntu-latest
+    environment:
+      name: release
     permissions:
       id-token: write
       contents: write
