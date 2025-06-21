@@ -17,6 +17,7 @@ GEM
     docile (1.4.1)
     fastimage (2.4.0)
     ffi (1.17.1-x86_64-darwin)
+    ffi (1.17.1-x86_64-linux-gnu)
     formatador (1.1.0)
     guard (2.19.1)
       formatador (>= 0.2.4)
@@ -40,7 +41,7 @@ GEM
     listen (3.9.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    logger (1.6.5)
+    logger (1.7.0)
     lumberjack (1.2.10)
     method_source (1.1.0)
     nenv (0.3.0)
@@ -100,6 +101,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-24
+  x86_64-linux
 
 DEPENDENCIES
   bundler (~> 2.0)
