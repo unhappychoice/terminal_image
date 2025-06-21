@@ -7,7 +7,7 @@ require 'terminal_image/version'
 Gem::Specification.new do |spec|
   spec.name                  = 'terminal_image'
   spec.version               = TerminalImage::VERSION
-  spec.required_ruby_version = '>= 2.5'
+  spec.required_ruby_version = '>= 3.1'
   spec.authors               = ['Yuji Ueki']
   spec.email                 = ['unhappychoice@gmail.com']
   spec.summary               = 'Display images on terminal'
@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
+  spec.add_dependency 'base64', '~> 0.3'
   spec.add_dependency 'fastimage'
 
   spec.add_development_dependency 'bundler', '~> 2.0'

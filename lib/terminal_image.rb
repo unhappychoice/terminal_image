@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'terminal_image/version'
+require 'base64'
 require 'fastimage'
 require 'open-uri'
 require 'tempfile'
