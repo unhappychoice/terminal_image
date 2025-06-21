@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    terminal_image (0.3.0)
+    terminal_image (1.0.0)
       base64 (~> 0.3)
       fastimage
 
