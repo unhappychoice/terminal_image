@@ -8,7 +8,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    ast (2.4.2)
+    ast (2.4.3)
     base64 (0.3.0)
     codecov (0.6.0)
       simplecov (>= 0.15, < 0.22)
@@ -50,9 +50,10 @@ GEM
       shellany (~> 0.0)
     ostruct (0.6.1)
     parallel (1.24.0)
-    parser (3.3.7.1)
+    parser (3.3.9.0)
       ast (~> 2.4.1)
       racc
+    prism (1.5.1)
     pry (0.15.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -86,8 +87,9 @@ GEM
       rubocop-ast (>= 1.17.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.17.0)
-      parser (>= 3.1.1.0)
+    rubocop-ast (1.46.0)
+      parser (>= 3.3.7.2)
+      prism (~> 1.4)
     ruby-progressbar (1.13.0)
     shellany (0.0.1)
     simplecov (0.21.2)
