@@ -12,7 +12,7 @@ group :development do
   gem 'guard-rspec'
   gem 'guard-rubocop'
   gem 'rake', '~> 13.0'
-  gem 'rspec', '~> 3.0'
+  gem 'rspec', '~> 3.13'
   gem 'rubocop'
   gem 'simplecov'
 end
