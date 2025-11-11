@@ -18,7 +18,7 @@ GEM
     fastimage (2.4.0)
     ffi (1.17.2-x86_64-darwin)
     ffi (1.17.2-x86_64-linux-gnu)
-    formatador (1.2.2)
+    formatador (1.2.3)
       reline
     guard (2.19.1)
       formatador (>= 0.2.4)
@@ -69,7 +69,7 @@ GEM
     rb-inotify (0.11.1)
       ffi (~> 1.0)
     regexp_parser (2.11.3)
-    reline (0.6.2)
+    reline (0.6.3)
       io-console (~> 0.5)
     rspec (3.13.2)
       rspec-core (~> 3.13.0)
