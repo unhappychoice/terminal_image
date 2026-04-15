@@ -11,7 +11,7 @@ group :development do
   gem 'guard'
   gem 'guard-rspec'
   gem 'guard-rubocop'
-  gem 'rake', '~> 13.3'
+  gem 'rake', '~> 13.4'
   gem 'rspec', '~> 3.13'
   gem 'rubocop'
   gem 'simplecov'
