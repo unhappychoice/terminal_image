@@ -7,7 +7,7 @@ require 'terminal_image/version'
 Gem::Specification.new do |spec|
   spec.name                  = 'terminal_image'
   spec.version               = TerminalImage::VERSION
-  spec.required_ruby_version = '>= 3.1'
+  spec.required_ruby_version = '>= 3.2'
   spec.authors               = ['Yuji Ueki']
   spec.email                 = ['unhappychoice@gmail.com']
   spec.summary               = 'Display images on terminal'
