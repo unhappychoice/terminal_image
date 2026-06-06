@@ -13,6 +13,8 @@ updates:
   - dependency-type: direct
   - dependency-type: indirect
   ignore:
+  - dependency-name: parallel
+    update-types: ["version-update:semver-major"]
   - dependency-name: codecov
     versions:
     - ">= 0.2.14.a, < 0.2.15"
