@@ -61,10 +61,15 @@ module TerminalImage
       type = FastImage.type(file)
       return file if type == :png
 
-      command = PngConverter::COMMANDS.find { |cmd| which(cmd) }
+      command = image_magick_command
       raise UnsupportedFormat, unsupported_format_message(type) unless command
 
+      AnsiEncoder.ensure_within_pixel_limit(*FastImage.size(file))
       PngConverter.convert(file, command: command)
+    end
+
+    def image_magick_command
+      PngConverter::COMMANDS.find { |cmd| which(cmd) && PngConverter.image_magick?(cmd) }
     end
 
     def unsupported_format_message(type)

@@ -124,21 +124,36 @@ RSpec.describe TerminalImage do # rubocop:disable Metrics/BlockLength
       before { allow(TerminalImage::AnsiEncoder).to receive(:terminal_width) { 30 } }
       before { allow(Open3).to receive(:capture3) { [png, '', status] } }
 
-      def stub_commands(*available)
+      def stub_commands(*available, image_magick: available)
         allow(TerminalImage).to receive(:which) { |cmd| available.include?(cmd) ? "/usr/bin/#{cmd}" : nil }
+        allow(TerminalImage::PngConverter).to receive(:image_magick?) { |cmd| image_magick.include?(cmd) }
       end
 
       it 'converts the first frame to PNG with magick' do
         stub_commands('magick', 'convert')
         expect(TerminalImage.encode(gif)).to eq(TerminalImage::AnsiEncoder.encode(File.open(file.path), width: 30))
         expect(Open3).to have_received(:capture3)
-          .with('magick', '-[0]', 'png:-', stdin_data: File.binread(gif.path), binmode: true)
+          .with('magick', *TerminalImage::PngConverter::RESOURCE_LIMITS, '-[0]', 'png:-',
+                stdin_data: File.binread(gif.path), binmode: true)
       end
 
       it 'falls back to convert without magick' do
         stub_commands('convert')
         TerminalImage.encode(gif)
-        expect(Open3).to have_received(:capture3).with('convert', '-[0]', 'png:-', any_args)
+        expect(Open3).to have_received(:capture3).with('convert', any_args)
+      end
+
+      it 'ignores a convert command that is not ImageMagick' do
+        stub_commands('convert', image_magick: [])
+        expect { TerminalImage.encode(gif) }.to raise_error(TerminalImage::UnsupportedFormat, /Install ImageMagick/)
+        expect(Open3).not_to have_received(:capture3)
+      end
+
+      it 'rejects oversized images before converting them' do
+        stub_commands('magick')
+        allow(FastImage).to receive(:size) { [10_000, 10_000] }
+        expect { TerminalImage.encode(gif) }.to raise_error(TerminalImage::ImageTooLarge)
+        expect(Open3).not_to have_received(:capture3)
       end
 
       it 'raises when the conversion fails' do
