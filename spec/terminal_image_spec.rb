@@ -122,7 +122,7 @@ RSpec.describe TerminalImage do # rubocop:disable Metrics/BlockLength
 
       before { allow(ENV).to receive(:fetch) { 'Not a iTerm' } }
       before { allow(TerminalImage::AnsiEncoder).to receive(:terminal_width) { 30 } }
-      before { allow(Open3).to receive(:capture3) { [png, '', status] } }
+      before { allow(TerminalImage::PngConverter).to receive(:pipe) { [png, status] } }
 
       def stub_commands(*available, image_magick: available)
         allow(TerminalImage).to receive(:which) { |cmd| available.include?(cmd) ? "/usr/bin/#{cmd}" : nil }
@@ -132,28 +132,27 @@ RSpec.describe TerminalImage do # rubocop:disable Metrics/BlockLength
       it 'converts the first frame to PNG with magick' do
         stub_commands('magick', 'convert')
         expect(TerminalImage.encode(gif)).to eq(TerminalImage::AnsiEncoder.encode(File.open(file.path), width: 30))
-        expect(Open3).to have_received(:capture3)
-          .with('magick', *TerminalImage::PngConverter::RESOURCE_LIMITS, '-[0]', 'png:-',
-                stdin_data: File.binread(gif.path), binmode: true)
+        expect(TerminalImage::PngConverter).to have_received(:pipe)
+          .with(['magick', *TerminalImage::PngConverter::RESOURCE_LIMITS, '-[0]', 'png:-'], gif)
       end
 
       it 'falls back to convert without magick' do
         stub_commands('convert')
         TerminalImage.encode(gif)
-        expect(Open3).to have_received(:capture3).with('convert', any_args)
+        expect(TerminalImage::PngConverter).to have_received(:pipe).with(['convert', *TerminalImage::PngConverter::RESOURCE_LIMITS, '-[0]', 'png:-'], gif)
       end
 
       it 'ignores a convert command that is not ImageMagick' do
         stub_commands('convert', image_magick: [])
         expect { TerminalImage.encode(gif) }.to raise_error(TerminalImage::UnsupportedFormat, /Install ImageMagick/)
-        expect(Open3).not_to have_received(:capture3)
+        expect(TerminalImage::PngConverter).not_to have_received(:pipe)
       end
 
       it 'rejects oversized images before converting them' do
         stub_commands('magick')
         allow(FastImage).to receive(:size) { [10_000, 10_000] }
         expect { TerminalImage.encode(gif) }.to raise_error(TerminalImage::ImageTooLarge)
-        expect(Open3).not_to have_received(:capture3)
+        expect(TerminalImage::PngConverter).not_to have_received(:pipe)
       end
 
       it 'raises when the conversion fails' do

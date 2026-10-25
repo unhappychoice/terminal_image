@@ -12,8 +12,7 @@ module TerminalImage
     class << self
       def convert(file, command:)
         file.rewind
-        args = [command, *RESOURCE_LIMITS, '-[0]', 'png:-']
-        png, _, status = Open3.capture3(*args, stdin_data: file.read.b, binmode: true)
+        png, status = pipe([command, *RESOURCE_LIMITS, '-[0]', 'png:-'], file)
         raise UnsupportedFormat, "#{command} could not convert the image to PNG" unless status.success?
 
         StringIO.new(png)
@@ -24,6 +23,26 @@ module TerminalImage
         status.success? && output.include?('ImageMagick')
       rescue SystemCallError
         false
+      end
+
+      private
+
+      def pipe(args, input)
+        Open3.popen2(*args, err: File::NULL) do |stdin, stdout, wait|
+          [stdin, stdout].each(&:binmode)
+          writer = Thread.new { stream(input, stdin) }
+          png = stdout.read
+          writer.join
+          [png, wait.value]
+        end
+      end
+
+      def stream(input, stdin)
+        IO.copy_stream(input, stdin)
+      rescue Errno::EPIPE
+        nil
+      ensure
+        stdin.close
       end
     end
   end
