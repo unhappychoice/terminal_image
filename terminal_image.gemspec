@@ -30,5 +30,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'base64', '~> 0.3'
+  spec.add_dependency 'chunky_png', '~> 1.4'
   spec.add_dependency 'fastimage'
 end

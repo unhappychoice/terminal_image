@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'terminal_image/version'
+require 'terminal_image/ansi_encoder'
+require 'terminal_image/png_converter'
 require 'base64'
 require 'fastimage'
 require 'open-uri'
@@ -8,6 +10,8 @@ require 'tempfile'
 
 module TerminalImage
   class UnsupportedTerminal < StandardError; end
+  class UnsupportedFormat < UnsupportedTerminal; end
+  class ImageTooLarge < UnsupportedTerminal; end
 
   class << self
     def show_url(url)
@@ -34,8 +38,7 @@ module TerminalImage
       elsif which 'img2sixel'
         encode_for_libsixel(file)
       else
-        warn 'Use iTerm2 or install libsixel according to https://github.com/saitoha/libsixel#install'
-        raise UnsupportedTerminal, 'Unsupported terminal'
+        encode_for_ansi(file)
       end
     end
 
@@ -48,6 +51,29 @@ module TerminalImage
 
     def encode_for_libsixel(file)
       `img2sixel < #{file.path} 2>/dev/null`
+    end
+
+    def encode_for_ansi(file)
+      AnsiEncoder.encode(png_source(file))
+    end
+
+    def png_source(file)
+      type = FastImage.type(file)
+      return file if type == :png
+
+      command = image_magick_command
+      raise UnsupportedFormat, unsupported_format_message(type) unless command
+
+      AnsiEncoder.ensure_within_pixel_limit(*FastImage.size(file))
+      PngConverter.convert(file, command: command)
+    end
+
+    def image_magick_command
+      PngConverter::COMMANDS.find { |cmd| which(cmd) && PngConverter.image_magick?(cmd) }
+    end
+
+    def unsupported_format_message(type)
+      "Install ImageMagick to show #{type || 'non-PNG'} images without iTerm2 or libsixel"
     end
 
     def which(cmd)
