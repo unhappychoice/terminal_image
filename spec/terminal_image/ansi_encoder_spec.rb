@@ -60,6 +60,14 @@ RSpec.describe TerminalImage::AnsiEncoder do # rubocop:disable Metrics/BlockLeng
 
       expect(described_class.encode(file, width: 80)).to include(fg(255, 0, 0))
     end
+
+    it 'rejects images above the pixel limit before decoding them' do
+      header = "\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR".b + [10_000, 10_000].pack('N2')
+      allow(ChunkyPNG::Image).to receive(:from_io)
+
+      expect { described_class.encode(StringIO.new(header), width: 80) }.to raise_error(TerminalImage::ImageTooLarge)
+      expect(ChunkyPNG::Image).not_to have_received(:from_io)
+    end
   end
 
   describe '.terminal_width' do

@@ -11,6 +11,7 @@ require 'tempfile'
 module TerminalImage
   class UnsupportedTerminal < StandardError; end
   class UnsupportedFormat < UnsupportedTerminal; end
+  class ImageTooLarge < UnsupportedTerminal; end
 
   class << self
     def show_url(url)

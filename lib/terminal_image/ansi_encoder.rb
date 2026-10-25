@@ -12,9 +12,11 @@ module TerminalImage
     RESET = "\e[0m"
     DEFAULT_WIDTH = 80
     MIN_VISIBLE_ALPHA = 128
+    MAX_PIXELS = 50_000_000
 
     class << self
       def encode(file, width: terminal_width)
+        ensure_decodable_size(file)
         file.rewind
         image = fit_to_width(ChunkyPNG::Image.from_io(file), width)
         row_pairs(image).map { |top, bottom| encode_line(top, bottom) }.join("\n")
@@ -25,6 +27,18 @@ module TerminalImage
       end
 
       private
+
+      def ensure_decodable_size(file)
+        width, height = png_dimensions(file)
+        return if width * height <= MAX_PIXELS
+
+        raise ImageTooLarge, "#{width}x#{height} exceeds the #{MAX_PIXELS} pixel limit of the ANSI fallback"
+      end
+
+      def png_dimensions(file)
+        file.rewind
+        file.read(24).to_s.b.unpack('@16N2').map(&:to_i)
+      end
 
       def console_width
         IO.console&.winsize&.last
