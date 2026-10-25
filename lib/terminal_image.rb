@@ -2,6 +2,7 @@
 
 require 'terminal_image/version'
 require 'terminal_image/ansi_encoder'
+require 'terminal_image/png_converter'
 require 'base64'
 require 'fastimage'
 require 'open-uri'
@@ -52,12 +53,21 @@ module TerminalImage
     end
 
     def encode_for_ansi(file)
-      type = FastImage.type(file)
-      unless type == :png
-        raise UnsupportedFormat, "Only PNG can be shown without iTerm2 or libsixel (got #{type || 'unknown'})"
-      end
+      AnsiEncoder.encode(png_source(file))
+    end
 
-      AnsiEncoder.encode(file)
+    def png_source(file)
+      type = FastImage.type(file)
+      return file if type == :png
+
+      command = PngConverter::COMMANDS.find { |cmd| which(cmd) }
+      raise UnsupportedFormat, unsupported_format_message(type) unless command
+
+      PngConverter.convert(file, command: command)
+    end
+
+    def unsupported_format_message(type)
+      "Install ImageMagick to show #{type || 'non-PNG'} images without iTerm2 or libsixel"
     end
 
     def which(cmd)

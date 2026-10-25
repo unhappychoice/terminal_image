@@ -99,13 +99,53 @@ RSpec.describe TerminalImage do # rubocop:disable Metrics/BlockLength
         expect(TerminalImage.encode(file)).to eq(TerminalImage::AnsiEncoder.encode(File.open(file.path), width: 30))
       end
 
-      it 'raises for formats other than PNG' do
-        gif = StringIO.new("GIF89a\x01\x00\x01\x00\x00\x00\x00;".b)
-        expect { TerminalImage.encode(gif) }.to raise_error(TerminalImage::UnsupportedFormat, /got gif/)
+      it 'does not call ImageMagick for PNG' do
+        allow(Open3).to receive(:capture3)
+        TerminalImage.encode(file)
+        expect(Open3).not_to have_received(:capture3)
+      end
+
+      it 'raises for other formats when ImageMagick is not installed' do
+        expect { TerminalImage.encode(File.open('spec/files/sample.gif')) }
+          .to raise_error(TerminalImage::UnsupportedFormat, /Install ImageMagick to show gif images/)
       end
 
       it 'keeps UnsupportedFormat rescuable as UnsupportedTerminal' do
         expect(TerminalImage::UnsupportedFormat.ancestors).to include(TerminalImage::UnsupportedTerminal)
+      end
+    end
+
+    context 'without iTerm2 and libsixel but with ImageMagick' do # rubocop:disable Metrics/BlockLength
+      let(:gif) { File.open('spec/files/sample.gif') }
+      let(:status) { instance_double(Process::Status, success?: true) }
+      let(:png) { File.binread('spec/files/sample.png') }
+
+      before { allow(ENV).to receive(:fetch) { 'Not a iTerm' } }
+      before { allow(TerminalImage::AnsiEncoder).to receive(:terminal_width) { 30 } }
+      before { allow(Open3).to receive(:capture3) { [png, '', status] } }
+
+      def stub_commands(*available)
+        allow(TerminalImage).to receive(:which) { |cmd| available.include?(cmd) ? "/usr/bin/#{cmd}" : nil }
+      end
+
+      it 'converts the first frame to PNG with magick' do
+        stub_commands('magick', 'convert')
+        expect(TerminalImage.encode(gif)).to eq(TerminalImage::AnsiEncoder.encode(File.open(file.path), width: 30))
+        expect(Open3).to have_received(:capture3)
+          .with('magick', '-[0]', 'png:-', stdin_data: File.binread(gif.path), binmode: true)
+      end
+
+      it 'falls back to convert without magick' do
+        stub_commands('convert')
+        TerminalImage.encode(gif)
+        expect(Open3).to have_received(:capture3).with('convert', '-[0]', 'png:-', any_args)
+      end
+
+      it 'raises when the conversion fails' do
+        stub_commands('convert')
+        allow(status).to receive(:success?) { false }
+        expect { TerminalImage.encode(gif) }
+          .to raise_error(TerminalImage::UnsupportedFormat, /convert could not convert the image/)
       end
     end
   end

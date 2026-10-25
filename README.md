@@ -9,7 +9,7 @@
 
 TerminalImage is a library to show images on terminals. 
 Currently, this library supports [iTerm2](https://iterm2.com/index.html) and terminals with [libsixel](https://github.com/saitoha/libsixel) installed.
-On other terminals, PNG images fall back to 24-bit ANSI colors (see [Fallback](#fallback)).
+On other terminals, images fall back to 24-bit ANSI colors (see [Fallback](#fallback)).
 
 ![](./images/example.png)
 
@@ -43,13 +43,17 @@ string = TerminalImage.encode_url('https://raw.githubusercontent.com/unhappychoi
 
 ## Fallback
 
-When the terminal is not iTerm2 and `img2sixel` is not installed, PNG images are drawn with 24-bit ("truecolor") ANSI colors.
+When the terminal is not iTerm2 and `img2sixel` is not installed, images are drawn with 24-bit ("truecolor") ANSI colors.
 Each character cell is an upper half block (`▀`): the foreground color is one pixel and the background color is the pixel below it.
 The image is scaled down to the terminal width (`IO.console`, then `$COLUMNS`, then 80 columns) and is never scaled up.
 Transparent pixels keep the terminal's default background.
 
-The fallback decodes images with the pure-Ruby [chunky_png](https://github.com/wvanbergen/chunky_png) gem, so it only supports PNG.
-Other formats raise `TerminalImage::UnsupportedFormat`, a subclass of `TerminalImage::UnsupportedTerminal`.
+Supported formats:
+
+- **PNG** is decoded with the pure-Ruby [chunky_png](https://github.com/wvanbergen/chunky_png) gem and needs nothing else.
+- **Other formats** (JPEG, GIF, WebP, ...) are converted to PNG with the [ImageMagick](https://imagemagick.org/) CLI
+  (`magick`, or `convert` for ImageMagick 6) when it is installed. Only the first frame of an animated image is shown.
+  Without ImageMagick they raise `TerminalImage::UnsupportedFormat`, a subclass of `TerminalImage::UnsupportedTerminal`.
 
 ## Contributing
 
