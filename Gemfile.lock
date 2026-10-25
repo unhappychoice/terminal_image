@@ -3,6 +3,7 @@ PATH
   specs:
     terminal_image (1.0.0)
       base64 (~> 0.3)
+      chunky_png (~> 1.4)
       fastimage
 
 GEM
@@ -10,6 +11,7 @@ GEM
   specs:
     ast (2.4.3)
     base64 (0.3.0)
+    chunky_png (1.4.0)
     codecov (0.2.12)
       json
       simplecov

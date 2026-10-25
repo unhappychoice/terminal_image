@@ -74,7 +74,7 @@ RSpec.describe TerminalImage do # rubocop:disable Metrics/BlockLength
     end
   end
 
-  describe '#encode' do
+  describe '#encode' do # rubocop:disable Metrics/BlockLength
     let(:file) { File.open('spec/files/sample.png') }
 
     context 'with iTerm2' do
@@ -90,11 +90,23 @@ RSpec.describe TerminalImage do # rubocop:disable Metrics/BlockLength
       it { expect(TerminalImage.encode(file)).to eq(expected) }
     end
 
-    context 'with unsupported terminal' do
-      let(:expected) { "\eP#{File.read('spec/files/sample_encoded_sixel')}\e\\" }
+    context 'without iTerm2 and libsixel' do
       before { allow(ENV).to receive(:fetch) { 'Not a iTerm' } }
       before { allow(TerminalImage).to receive(:which) { false } }
-      it { expect { TerminalImage.encode(file) }.to raise_error(TerminalImage::UnsupportedTerminal) }
+      before { allow(TerminalImage::AnsiEncoder).to receive(:terminal_width) { 30 } }
+
+      it 'falls back to ANSI colors' do
+        expect(TerminalImage.encode(file)).to eq(TerminalImage::AnsiEncoder.encode(File.open(file.path), width: 30))
+      end
+
+      it 'raises for formats other than PNG' do
+        gif = StringIO.new("GIF89a\x01\x00\x01\x00\x00\x00\x00;".b)
+        expect { TerminalImage.encode(gif) }.to raise_error(TerminalImage::UnsupportedFormat, /got gif/)
+      end
+
+      it 'keeps UnsupportedFormat rescuable as UnsupportedTerminal' do
+        expect(TerminalImage::UnsupportedFormat.ancestors).to include(TerminalImage::UnsupportedTerminal)
+      end
     end
   end
 end

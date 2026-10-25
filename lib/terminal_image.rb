@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'terminal_image/version'
+require 'terminal_image/ansi_encoder'
 require 'base64'
 require 'fastimage'
 require 'open-uri'
@@ -8,6 +9,7 @@ require 'tempfile'
 
 module TerminalImage
   class UnsupportedTerminal < StandardError; end
+  class UnsupportedFormat < UnsupportedTerminal; end
 
   class << self
     def show_url(url)
@@ -34,8 +36,7 @@ module TerminalImage
       elsif which 'img2sixel'
         encode_for_libsixel(file)
       else
-        warn 'Use iTerm2 or install libsixel according to https://github.com/saitoha/libsixel#install'
-        raise UnsupportedTerminal, 'Unsupported terminal'
+        encode_for_ansi(file)
       end
     end
 
@@ -48,6 +49,15 @@ module TerminalImage
 
     def encode_for_libsixel(file)
       `img2sixel < #{file.path} 2>/dev/null`
+    end
+
+    def encode_for_ansi(file)
+      type = FastImage.type(file)
+      unless type == :png
+        raise UnsupportedFormat, "Only PNG can be shown without iTerm2 or libsixel (got #{type || 'unknown'})"
+      end
+
+      AnsiEncoder.encode(file)
     end
 
     def which(cmd)
